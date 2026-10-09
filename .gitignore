@@ -1,0 +1,7 @@
+node_modules/
+.local/
+*.sqlite*
+*.dpapi
+.env*
+*.log
+dist/

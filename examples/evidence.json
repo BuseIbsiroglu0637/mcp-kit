@@ -1,0 +1,5 @@
+{
+  "kind": "example-only",
+  "projectStatus": {"status": "not_verified", "sourceDate": null, "codeCommit": null, "openItems": ["Add your own project records and evidence."], "technicalApproval": false},
+  "evidence": [{"evidenceId": "EXAMPLE-01", "title": "Example test evidence — no test executed", "sourceDate": null, "codeCommit": null, "result": "not_run", "technicalApproval": false}]
+}

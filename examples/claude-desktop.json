@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "arkemx-own-project": {
+      "command": "C:/PATH/TO/node.exe",
+      "args": ["C:/PATH/TO/arkemx-mcp-kit/src/server.mjs", "stdio", "reader"]
+    }
+  }
+}
