@@ -2,7 +2,7 @@ import test from 'node:test';import assert from 'node:assert/strict';import fs f
 import http from 'node:http';import {Client} from '@modelcontextprotocol/sdk/client/index.js';import {StdioClientTransport} from '@modelcontextprotocol/sdk/client/stdio.js';import {StreamableHTTPClientTransport} from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const projectId='DEMO-PROJECT';
-function fixture(){const dir=fs.mkdtempSync(path.join(os.tmpdir(),'arkemx-kit-test-'));const cfg={projectId,actor:'test-owner',writesEnabled:false,port:43200,grants:['reader','writer'].map(role=>({role,enabled:true,expiresAt:new Date(Date.now()+86400000).toISOString(),token:crypto.randomBytes(32).toString('base64url')}))};const save=()=>fs.writeFileSync(path.join(dir,'config.json'),JSON.stringify(cfg));save();fs.copyFileSync(path.join(root,'examples/evidence.json'),path.join(dir,'evidence.json'));return {dir,cfg,save};}
+function fixture(){const dir=fs.realpathSync.native(fs.mkdtempSync(path.join(os.tmpdir(),'arkemx-kit-test-')));const cfg={projectId,actor:'test-owner',writesEnabled:false,port:43200,grants:['reader','writer'].map(role=>({role,enabled:true,expiresAt:new Date(Date.now()+86400000).toISOString(),token:crypto.randomBytes(32).toString('base64url')}))};const save=()=>fs.writeFileSync(path.join(dir,'config.json'),JSON.stringify(cfg));save();fs.copyFileSync(path.join(root,'examples/evidence.json'),path.join(dir,'evidence.json'));return {dir,cfg,save};}
 const makeClient=()=>new Client({name:'kit-test',version:'1.0.0'},{capabilities:{}});
 const env=dir=>({...process.env,ARKEMX_DATA_DIR:dir});
 test('Real STDIO: reader discovery, example evidence, project isolation and write denial',async()=>{
@@ -52,5 +52,5 @@ test('Real HTTP: authentication, host/origin boundaries, reader and writer separ
   assert.equal((await writer.callTool({name:'arkemx_list_live_records',arguments:{projectId}})).structuredContent.items.length,1);
   f.cfg.grants.find(g=>g.role==='writer').enabled=false;f.save();assert.equal((await post({Authorization:token('writer')})).status,401);
   f.cfg.grants.find(g=>g.role==='reader').expiresAt='2000-01-01T00:00:00Z';f.save();assert.equal((await post({Authorization:token('reader')})).status,401);
- }finally{for(const c of clients)await c.close().catch(()=>{});child.kill();await new Promise(r=>child.once('exit',r));fs.rmSync(f.dir,{recursive:true,force:true});}
+ }finally{for(const c of clients)await c.close().catch(()=>{});if(child.exitCode===null&&child.signalCode===null){const exited=new Promise(r=>child.once('exit',r));child.kill();await exited;}fs.rmSync(f.dir,{recursive:true,force:true});}
 });

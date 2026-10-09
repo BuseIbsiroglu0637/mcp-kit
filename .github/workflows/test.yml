@@ -5,6 +5,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
+    timeout-minutes: 5
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -13,4 +14,4 @@ jobs:
           node-version: 24.19.0
           cache: npm
       - run: npm ci --ignore-scripts
-      - run: npm test
+      - run: node --test --test-reporter=tap --test-timeout=30000 test/*.test.mjs
