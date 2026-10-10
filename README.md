@@ -1,4 +1,4 @@
-# ARKEMX MCP Kit — kendi projen için kurulum paketi
+# MCP Kit — kendi projen için kurulum paketi
 
 Bu paket bir kişinin kendi bilgisayarında kendi proje kayıtları, kararları ve görevlerini MCP üzerinden kullanması içindir. Buse'nin proje kayıtları, anahtarları, tünelleri, test kanıtları ve özel veritabanı dahil değildir. GitHub kodu dağıtır; sunucuyu çalıştırmaz.
 
